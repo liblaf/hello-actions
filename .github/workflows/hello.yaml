@@ -1,0 +1,14 @@
+name: Hello
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: wget --output-document="Mido.sh" "https://raw.githubusercontent.com/ElliotKillick/Mido/main/Mido.sh"
+      - run: chmod +x Mido.sh
+      - run: ./Mido.sh win11x64
+      - run: ls --almost-all --classify --human-readable -l --recursive
