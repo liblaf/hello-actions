@@ -35,7 +35,7 @@ jobs:
           else
             app_slug="github-actions"
           fi
-          export GIT_COMMITTER_NAME="${{ steps.app.outputs.app-slug }}[bot]"
+          export GIT_COMMITTER_NAME="${app_slug}[bot]"
           id=$(gh api --jq '.id' "/users/${GIT_COMMITTER_NAME}")
           export GIT_COMMITTER_EMAIL="${id}+${GIT_COMMITTER_NAME}@users.noreply.github.com"
           export GIT_COMMITTER="${GIT_COMMITTER_NAME} <${GIT_COMMITTER_EMAIL}>"
