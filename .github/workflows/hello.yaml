@@ -8,10 +8,16 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-      - run: wget --output-document="Fido.ps1" "https://raw.githubusercontent.com/pbatard/Fido/master/Fido.ps1"
-      - run: ./Fido.ps1 -Win List
-        shell: pwsh
-        continue-on-error: true
-      - run: ./Fido.ps1 -Lang List
-        shell: pwsh
-        continue-on-error: true
+      - id: app
+        name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+      - name: Get the authenticated user
+        run: gh api /user
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+      - name: GitHub App slug
+        run: |-
+          echo "app-slug: ${{ steps.app.outputs.app-slug }}"
