@@ -1,0 +1,28 @@
+name: Hello
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Hello World
+        run: echo "Hello, world!" > "hello.txt"
+      - id: files
+        name: List Files
+        run: |-
+          git add "hello.txt"
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          git diff --name-only --cached >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+      - name: Commit
+        uses: suzuki-shunsuke/commit-action@main
+        with:
+          commit_message: "chore: add hello.txt"
+          app_id: ${{ secrets.GH_APP_ID }}
+          app_private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          files: ${{ steps.files.outputs.files }}
